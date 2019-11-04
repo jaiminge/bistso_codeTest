@@ -57,11 +57,13 @@ public class OrderController {
     @RequestMapping("/query/{userId}/{status}/{currency}")
     public List<Order> getBy(@PathVariable long userId,
                              @PathVariable String status,
-                             @PathVariable String currency) {
+                             @PathVariable String minorCurrency,
+                             @PathVariable String majorCurrency) {
         Order.Status st = status == null || status.isEmpty() ? null : Order.Status.valueOf(status);
-        Currency curr = currency == null || currency.isEmpty() ? null : Currency.valueOf(currency);
-        List<Order> r = orderModel.ordersForUser(userId, st, curr);
-        log.debug("Query {}/{}/{} returns {} orders", userId, st, curr, r.size());
+        Currency mincurr = minorCurrency == null || minorCurrency.isEmpty() ? null : Currency.valueOf(minorCurrency);
+        Currency majcurr = majorCurrency == null || majorCurrency.isEmpty() ? null : Currency.valueOf(majorCurrency);
+        List<Order> r = orderModel.ordersForUser(userId, st, mincurr, majcurr);
+        log.debug("Query {}/{}/{} returns {} orders", userId, st, majorCurrency, r.size());
         return r;
     }
 }
